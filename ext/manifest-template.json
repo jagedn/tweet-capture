@@ -1,0 +1,38 @@
+{
+  "name": "Twitter stone",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "Twitter stone",
+  "homepage_url": "https://jorge.aguilera.soy",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "default_locale": "en",
+  "options_page": "src/options_custom/index.html",
+  "permissions": [
+    "activeTab",
+    "clipboardRead"
+  ],  
+  "background": {
+      "page": "src/background.html",
+      "persistent": false
+  },
+  "browser_action": {
+    "default_title": "Twitter to stone"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.twitter.com/*"
+      ],      
+      "run_at": "document_end",
+      "js": [
+        "src/FileSaver.min.js",
+        "src/util.js",
+        "src/inject/inject.js"
+      ]
+    }
+  ]
+}

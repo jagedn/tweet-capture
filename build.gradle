@@ -1,0 +1,38 @@
+plugins{
+}
+import groovy.json.*
+
+group 'twitter-stone'
+version '0.0.1'
+
+task clean(){
+   doLast{
+      new File('build').delete()
+   }
+}
+
+task prepareRelease(type:Copy){
+    from 'ext'
+    into 'build/extension'
+}
+
+task updateManifest(dependsOn:prepareRelease){
+    doLast{
+        def jsonSlurper = new JsonSlurper()
+        def manifest = jsonSlurper.parse(file("build/extension/manifest-template.json"))
+        manifest.version = "$version"
+        file("build/extension/manifest.json").text = JsonOutput.prettyPrint(JsonOutput.toJson(manifest))
+    }
+}
+
+task zipExtension(type:Zip,dependsOn:updateManifest){    
+    from('build/extension')
+    archiveName = 'last.zip'
+    destinationDir = file('build')    
+}
+
+task build(dependsOn:zipExtension){
+    doLast{        
+        file('build/last.zip').renameTo "build/${project.name}-v${version}.zip"
+    }
+}
