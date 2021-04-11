@@ -26,12 +26,18 @@ function extractArticle(tabId, dataUrl, rect){
         for(x in imageData.data){
           data[x]=imageData.data[x]
         }
+        let tofile = Storage.get_option("store.settings.tofile",false);
+        let totweet = Storage.get_option("store.settings.totweet",true);
+        let writemsg = Storage.get_option("store.settings.writemsg","");
         chrome.tabs.sendMessage(tabId, { 
           action: "saveImage", 
           tabId: tabId,
           imageData:data, 
           width:imageData.width, 
-          height:imageData.height
+          height:imageData.height,
+          tofile: tofile,
+          totweet: totweet,
+          writemsg: writemsg
         });
   });
 }
